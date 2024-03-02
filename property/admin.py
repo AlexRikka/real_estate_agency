@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Flat
+from .models import Flat, Complain
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -11,4 +11,9 @@ class AuthorAdmin(admin.ModelAdmin):
     list_filter = ['new_building', 'rooms_number', 'has_balcony']
 
 
+class ComplainAdmin(admin.ModelAdmin):
+    raw_id_fields = ('user', 'flat')
+
+
 admin.site.register(Flat, AuthorAdmin)
+admin.site.register(Complain, ComplainAdmin)
