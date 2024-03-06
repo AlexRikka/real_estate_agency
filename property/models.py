@@ -31,16 +31,14 @@ class Flat(models.Model):
         'Этаж',
         max_length=3,
         help_text='Первый этаж, последний этаж, пятый этаж')
-
     rooms_number = models.IntegerField(
         'Количество комнат в квартире',
         db_index=True)
     living_area = models.IntegerField(
-        'количество жилых кв.метров',
+        'Количество жилых кв.метров',
         null=True,
         blank=True,
         db_index=True)
-
     has_balcony = models.NullBooleanField('Наличие балкона', db_index=True)
     active = models.BooleanField('Активно-ли объявление', db_index=True)
     construction_year = models.IntegerField(
@@ -49,13 +47,17 @@ class Flat(models.Model):
         blank=True,
         db_index=True)
 
-    new_building = models.BooleanField(null=True, blank=True, verbose_name='')
-    liked_by = models.ManyToManyField(
-        to=User,
-        related_name='users',
+    new_building = models.BooleanField(
         null=True,
         blank=True,
-        verbose_name='Кто лайкнул')
+        verbose_name='Новостройка')
+
+    liked_by = models.ManyToManyField(
+        to=User,
+        null=True,
+        blank=True,
+        verbose_name='Кто лайкнул',
+        related_name='liked_flats')
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
@@ -67,11 +69,13 @@ class Complain(models.Model):
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
-        verbose_name='Кто пожаловался')
+        verbose_name='Кто пожаловался',
+        related_name='user_complains')
     flat = models.ForeignKey(
         to=Flat,
         on_delete=models.CASCADE,
-        verbose_name='Квартира, на которую пожаловались')
+        verbose_name='Квартира, на которую пожаловались',
+        related_name='flat_complains')
     text = models.TextField(verbose_name='Текст жалобы')
 
     def __str__(self):
