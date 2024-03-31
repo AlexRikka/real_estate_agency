@@ -7,7 +7,8 @@ def fill_field_new_building(apps, schema_editor):
     """Fills in new_building filed for all objects."""
 
     Flat = apps.get_model('property', 'Flat')
-    Flat.objects.filter(construction_year__gt=2015).update(new_building=True)
+    Flat.objects.filter(construction_year__gte=2015).update(new_building=True)
+    Flat.objects.filter(construction_year__lt=2015).update(new_building=False)
 
 
 class Migration(migrations.Migration):
